@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  if (req.body.name && req.body.description ){
+  if (req.body.name && req.body.description){
     projectDb.insert(req.body)
     .then(rez => {
       res.status(200).json({ data: rez }) 
@@ -40,6 +40,7 @@ router.get('/:id', validateProjectId, (req, res) => {
 });
 
 router.put('/:id', validateProjectId, (req, res) => {
+  if (req.body.name !== "" && req.body.description !== ""){
   projectDb.update(req.project.id, req.body)
     .then(rez => {
       res.status(200).json({ data: rez }) 
@@ -50,6 +51,9 @@ router.put('/:id', validateProjectId, (req, res) => {
         err: err
       })
     })
+  } else {
+    res.status(400).json({message: "name or description was empty from your request"})
+  }
 });
 
 router.delete('/:id', validateProjectId, (req, res) => {

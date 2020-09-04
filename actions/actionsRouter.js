@@ -41,6 +41,7 @@ router.get('/:id', validateActionId, (req, res) => {
 });
 
 router.put('/:id', validateActionId, (req, res) => {
+  if (req.body.notes !== "" && req.body.description !== ""){
   actionDb.update(req.action.id, req.body)
     .then(rez => {
       res.status(200).json({ data: rez }) 
@@ -51,6 +52,9 @@ router.put('/:id', validateActionId, (req, res) => {
         err: err
       })
     })
+  } else {
+    res.status(400).json({message: "notes or description was empty from your request"})
+  }
 });
 
 router.delete('/:id', validateActionId, (req, res) => {
